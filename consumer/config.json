@@ -1,0 +1,37 @@
+{
+    "project-name": "Prueba Deplyn",
+    "origin": "*",
+    "develop": true,
+    "apiPrefix": "/api",    
+    "server": {
+        "port": 4003,
+        "request": {
+            "type": "rest",
+            "realtime": false,
+            "methods": [
+                "ALL"
+            ]
+        },
+        "exports": {
+            "socket": true
+        }
+    },
+    "database": {
+        "client": "mysql",
+        "host": "localhost",
+        "port": 3306,
+        "database": "dbprueba5",
+        "user": "root",
+        "password": "",
+        "useSSH": true,
+        "sshConfig": {    
+        }
+    },
+    "rules": [
+        {"uri": "/*", "middlewares": ["deplyn_auth", "csrf_token"]}
+    ],
+    "sqls": [
+    {
+        "name": "consultaleito", "sql": "SELECT DFJKASDJFKASDLFJAS DFKLASJDF ASKLDFJA name = :name"}
+    ]
+}
