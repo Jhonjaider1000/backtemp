@@ -4,7 +4,7 @@
     "develop": true,
     "apiPrefix": "/api",    
     "server": {
-        "port": 4003,
+        "port": 82,
         "request": {
             "type": "rest",
             "realtime": false,
