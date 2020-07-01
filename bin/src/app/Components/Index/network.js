@@ -17,7 +17,7 @@ route.get("/", (req, res) => {
 
 route.get("/history/last", (req, res) => {
   const dispositivo = req.params.dispositivo;
-  const sql = `select * from history where dispositivo = '${dispositivo}' AND fecha_registro > date_sub(now(), interval 30 second) ORDER BY fecha_registro DESC LIMIT 1`;
+  const sql = `select * from history where dispositivo = '${dispositivo}' AND fecha_registro > date_sub(now(), interval 60 second) ORDER BY fecha_registro DESC LIMIT 1`;
   const m = new Model("history");
   return new Promise((resolve, reject) => {
     m.query(sql).then((rows) => {
