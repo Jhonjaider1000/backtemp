@@ -15,6 +15,24 @@ route.get("/", (req, res) => {
   res.json({ code: 1, message: "Servicios Deplyn corriendo correctamente." });
 });
 
+route.get("/history/last", (req, res) => {
+  const dispositivo = req.params.dispositivo;
+  const sql = `select * from history where dispositivo = '${dispositivo}' AND fecha_registro > date_sub(now(), interval 30 second) ORDER BY fecha_registro DESC LIMIT 1`;
+  const m = new Model("history");
+  return new Promise((resolve, reject) => {
+    m.query(sql).then((rows) => {
+      const array = Array.isArray(rows) && rows.length > 0 ? rows[0] : [];
+      const finalList =
+        Array.isArray(array) && array.length > 0 ? array[0] : null;
+      resolve({
+        code: finalList ? 1 : 0,
+        message: finalList ? "success" : "empty",
+        data: finalList,
+      });
+    });
+  });
+});
+
 route
   .post("/new/history", (req, res) => {
     return new Promise((resolve, reject) => {
@@ -29,8 +47,8 @@ route
       if (validator.fails()) {
         return resolve({ code: -1, errors: validator.getErrors() });
       }
-      
-      initSocket("http://localhost:4003");
+
+      initSocket("http://localhost:82");
       const m = new Model("history");
       return m
         .insert({

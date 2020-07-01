@@ -20,7 +20,7 @@
         "client": "mysql",
         "host": "localhost",
         "port": 3306,
-        "database": "dbprueba5",
+        "database": "covidanalizer",
         "user": "root",
         "password": "",
         "useSSH": true,
