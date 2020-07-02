@@ -36,11 +36,7 @@ route.get("/history/last", (req, res) => {
 
 const newHistory = (req, res) => {
   return new Promise((resolve, reject) => {
-    const params = {
-      ...getProp(req, "body", {}),
-      ...getProp(req, "params", {}),
-      ...getProp(req, "query", {}),
-    };
+    const params = this.method == "get" ? req.query : req.body;
     const dispositivo = params.dispositivo ? params.dispositivo : 1;
     const documento = params.documento;
     const temperatura = params.temperatura;
