@@ -3,6 +3,7 @@ import CrudController from "./CrudController";
 import Model from "../../Models/Model";
 import { Validator } from "../../Http/Validations/validator";
 import { initSocket, sendMessage } from "./Listeners";
+import { get as getProp } from "object-path";
 
 const SOCKET_MESSAGES = {
   FETCH: "FETCH",
@@ -35,11 +36,16 @@ route.get("/history/last", (req, res) => {
 
 const newHistory = (req, res) => {
   return new Promise((resolve, reject) => {
-    const dispositivo = req.body.dispositivo ? req.body.dispositivo : 1;
-    const documento = req.body.documento;
-    const temperatura = req.body.temperatura;
+    const params = {
+      ...getProp(req, "body", {}),
+      ...getProp(req, "params", {}),
+      ...getProp(req, "query", {}),
+    };
+    const dispositivo = params.dispositivo ? params.dispositivo : 1;
+    const documento = params.documento;
+    const temperatura = params.temperatura;
     const validator = new Validator();
-    validator.make(req.body, {
+    validator.make(params, {
       documento: "required",
       temperatura: "required",
     });
