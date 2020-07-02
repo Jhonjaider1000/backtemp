@@ -33,41 +33,49 @@ route.get("/history/last", (req, res) => {
   });
 });
 
+const newHistory = (req, res) => {
+  return new Promise((resolve, reject) => {
+    const dispositivo = req.body.dispositivo ? req.body.dispositivo : 1;
+    const documento = req.body.documento;
+    const temperatura = req.body.temperatura;
+    const validator = new Validator();
+    validator.make(req.body, {
+      documento: "required",
+      temperatura: "required",
+    });
+    if (validator.fails()) {
+      return resolve({ code: -1, errors: validator.getErrors() });
+    }
+
+    initSocket("http://vmi304306.contaboserver.net:82");
+    const m = new Model("history");
+    return m
+      .insert({
+        dispositivo: dispositivo,
+        documento: documento,
+        temperatura: temperatura,
+        fecha_registro: new Date(),
+      })
+      .then((rows) => {
+        sendMessage({
+          type: SOCKET_MESSAGES.ADD_HISTORY,
+          dispositivo: dispositivo,
+        });
+        return resolve({
+          code: 1,
+          message: "Se ha registrado correctamente el registro.",
+        });
+      });
+  });
+};
+
+route.get("/new/history", (req, res) => {
+  return newHistory(req, res);
+});
+
 route
   .post("/new/history", (req, res) => {
-    return new Promise((resolve, reject) => {
-      const dispositivo = req.body.dispositivo ? req.body.dispositivo : 1;
-      const documento = req.body.documento;
-      const temperatura = req.body.temperatura;
-      const validator = new Validator();
-      validator.make(req.body, {
-        documento: "required",
-        temperatura: "required",
-      });
-      if (validator.fails()) {
-        return resolve({ code: -1, errors: validator.getErrors() });
-      }
-
-      initSocket("http://localhost:82");
-      const m = new Model("history");
-      return m
-        .insert({
-          dispositivo: dispositivo,
-          documento: documento,
-          temperatura: temperatura,
-          fecha_registro: new Date(),
-        })
-        .then((rows) => {
-          sendMessage({
-            type: SOCKET_MESSAGES.ADD_HISTORY,
-            dispositivo: dispositivo,
-          });
-          return resolve({
-            code: 1,
-            message: "Se ha registrado correctamente el registro.",
-          });
-        });
-    });
+    return newHistory(req, res);
   })
   .csrfDisabled();
 
