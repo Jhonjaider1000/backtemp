@@ -1,7 +1,7 @@
 {
     "project-name": "Prueba Deplyn",
     "origin": "*",
-    "develop": true,
+    "develop": false,
     "apiPrefix": "/api",    
     "server": {
         "port": 82,
