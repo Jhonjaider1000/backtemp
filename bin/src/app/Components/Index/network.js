@@ -34,9 +34,9 @@ route.get("/history/last", (req, res) => {
   });
 });
 
-const newHistory = (req, res) => {
+const newHistory = (req, res, method = 'post') => {
   return new Promise((resolve, reject) => {
-    const params = this.method == "get" ? req.query : req.body;
+    const params = method == "get" ? req.query : req.body;
     const dispositivo = params.dispositivo ? params.dispositivo : 1;
     const documento = params.documento;
     const temperatura = params.temperatura;
@@ -72,12 +72,12 @@ const newHistory = (req, res) => {
 };
 
 route.get("/new/history", (req, res) => {
-  return newHistory(req, res);
+  return newHistory(req, res, 'get');
 });
 
 route
   .post("/new/history", (req, res) => {
-    return newHistory(req, res);
+    return newHistory(req, res, 'post');
   })
   .csrfDisabled();
 
